@@ -6,11 +6,17 @@ import { v2 as cloudinary } from "cloudinary"
 // Get User Data
 export const getUserData = async (req, res) => {
 
-    const userId = req.auth.userId
+
+    console.log("AUTH:", req.auth);
+
+    const userId = req.auth?.userId;
+
+    console.log("USER ID:", userId);
 
     try {
 
         const user = await User.findById(userId)
+        console.log("FOUND USER:", user);
 
         if (!user) {
             return res.json({ success: false, message: 'User Not Found' })
@@ -19,6 +25,7 @@ export const getUserData = async (req, res) => {
         res.json({ success: true, user })
 
     } catch (error) {
+         console.log(error);
         res.json({ success: false, message: error.message })
     }
 

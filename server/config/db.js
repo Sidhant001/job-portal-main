@@ -7,6 +7,9 @@ const connectDB = async () => {
     console.log("✅ Database Connected");
     console.log("State:", mongoose.connection.readyState);
 
+    console.log("Database Name:", mongoose.connection.name);
+    console.log("Host:", mongoose.connection.host);
+
   } catch (error) {
     console.log("❌ DB Error:", error);
   }

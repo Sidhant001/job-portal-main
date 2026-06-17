@@ -5,8 +5,14 @@ import generateToken from "../utils/generateToken.js";
 import Job from "../models/Job.js";
 import JobApplication from "../models/JobApplication.js";
 
+
 // Register a new company
 export const registerCompany = async (req, res) => {
+
+    console.log("REGISTER REQUEST RECEIVED");
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
 
     const { name, email, password } = req.body
 
@@ -27,14 +33,12 @@ export const registerCompany = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, salt)
 
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path)
-
-        const company = await Company.create({
-            name,
-            email,
-            password: hashPassword,
-            image: imageUpload.secure_url
-        })
+const company = await Company.create({
+    name,
+    email,
+    password: hashPassword,
+    image: "https://dummyimage.com/200x200"
+})
 
         res.json({
             success: true,
@@ -48,8 +52,14 @@ export const registerCompany = async (req, res) => {
         })
 
     } catch (error) {
-        res.json({ success: false, message: error.message })
-    }
+    console.log("REGISTER ERROR:");
+    console.log(error);
+
+    res.json({
+        success: false,
+        message: error.message
+    });
+}
 }
 
 // Login Company
@@ -60,6 +70,8 @@ export const loginCompany = async (req, res) => {
     try {
 
         const company = await Company.findOne({ email })
+                console.log("LOGIN EMAIL:", email);
+        console.log("FOUND COMPANY:", company);
 
         if (await bcrypt.compare(password, company.password)) {
 
